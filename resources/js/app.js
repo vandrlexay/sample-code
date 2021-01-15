@@ -6,14 +6,19 @@
 
 import './bootstrap';
 import { route as _route } from "./routes.js";
+import { saveAs } from "file-saver";
 
-const route = function(url) { return "/index.php" + _route(url); };
+import { default as Vue } from "vue";
+window.Vue = Vue;
 
-window.Vue = require('vue').default;
 
 Vue.component('Grid', require('./components/Grid.vue').default);
 Vue.component('Toolbar', require('./components/Toolbar.vue').default);
 Vue.component('Container', require('./components/Container.vue').default);
+
+
+// REMOVE
+const route = function(url) { return "/index.php" + _route(url); };
 
 const app = new Vue({
     el: '#app',
@@ -22,14 +27,23 @@ const app = new Vue({
                   v-on:fileUpload="handleFileUpload"
                   v-on:fileDownload="handleFileDownload"
                   v-bind:countryList="countryList" 
+                  v-bind:fileTypes="fileTypes" 
                   v-bind:route="route"/>`,
     data : function () {
         return {
+            fileTypes : [],
             route: route,
             countryList : [
                 { "country" : "aaa", "capital" : "AAA" }
             ]
         };
+    },
+    created : function() {
+        const app = this;
+        axios.get(route('countryfile/listFormats')).then(
+            function(response) {
+                app.fileTypes = response.data;
+            });
     },
     methods : {
         handleCountryListChange : function(value) {
@@ -57,7 +71,8 @@ const app = new Vue({
                 },
                 headers: {'Content-Type': 'multipart/form-data' }
             }).then(function (response) {
-                
+                const blob = new Blob([response.data.data], {type: response.data.mime});
+                saveAs(blob, "countries." + format );
             });
 
         }

@@ -1858,8 +1858,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["countryList", "route"],
+  props: ["countryList", "route", "fileTypes"],
   methods: {
     handleCountryListChange: function handleCountryListChange(value) {
       this.$emit("countryListChange", value);
@@ -1907,8 +1911,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["countryList"]
+  props: ["countryList"],
+  methods: {
+    handleDelete: function handleDelete(country) {
+      this.$delete(this.countryList, this.countryList.indexOf(country));
+    },
+    handleAdd: function handleAdd(e) {
+      this.countryList.push({
+        country: "",
+        capital: ""
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -1943,20 +1965,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["route", "countryList"],
-  data: function data() {
-    return {
-      fileTypes: []
-    };
-  },
-  // TODO move this to app, pass only list of file formats
-  created: function created() {
-    var self = this; // TODO remove
-
-    axios.get(this.route('countryfile/listFormats')).then(function (response) {
-      self.fileTypes = response.data;
-    });
-  },
+  props: ["route", "countryList", "fileTypes"],
   methods: {
     handleDownload: function handleDownload(e) {
       e.preventDefault();
@@ -1984,6 +1993,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _routes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes.js */ "./resources/js/routes.js");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -1992,25 +2004,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+window.Vue = vue__WEBPACK_IMPORTED_MODULE_3__.default;
+vue__WEBPACK_IMPORTED_MODULE_3__.default.component('Grid', __webpack_require__(/*! ./components/Grid.vue */ "./resources/js/components/Grid.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_3__.default.component('Toolbar', __webpack_require__(/*! ./components/Toolbar.vue */ "./resources/js/components/Toolbar.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_3__.default.component('Container', __webpack_require__(/*! ./components/Container.vue */ "./resources/js/components/Container.vue").default); // REMOVE
+
 var route = function route(url) {
   return "/index.php" + (0,_routes_js__WEBPACK_IMPORTED_MODULE_1__.route)(url);
 };
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
-Vue.component('Grid', __webpack_require__(/*! ./components/Grid.vue */ "./resources/js/components/Grid.vue").default);
-Vue.component('Toolbar', __webpack_require__(/*! ./components/Toolbar.vue */ "./resources/js/components/Toolbar.vue").default);
-Vue.component('Container', __webpack_require__(/*! ./components/Container.vue */ "./resources/js/components/Container.vue").default);
-var app = new Vue({
+var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
   el: '#app',
-  template: "<Container \n                  v-on:countryListChange=\"handleCountryListChange\" \n                  v-on:fileUpload=\"handleFileUpload\"\n                  v-on:fileDownload=\"handleFileDownload\"\n                  v-bind:countryList=\"countryList\" \n                  v-bind:route=\"route\"/>",
+  template: "<Container \n                  v-on:countryListChange=\"handleCountryListChange\" \n                  v-on:fileUpload=\"handleFileUpload\"\n                  v-on:fileDownload=\"handleFileDownload\"\n                  v-bind:countryList=\"countryList\" \n                  v-bind:fileTypes=\"fileTypes\" \n                  v-bind:route=\"route\"/>",
   data: function data() {
     return {
+      fileTypes: [],
       route: route,
       countryList: [{
         "country": "aaa",
         "capital": "AAA"
       }]
     };
+  },
+  created: function created() {
+    var app = this;
+    axios.get(route('countryfile/listFormats')).then(function (response) {
+      app.fileTypes = response.data;
+    });
   },
   methods: {
     handleCountryListChange: function handleCountryListChange(value) {
@@ -2040,7 +2061,12 @@ var app = new Vue({
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then(function (response) {});
+      }).then(function (response) {
+        var blob = new Blob([response.data.data], {
+          type: response.data.mime
+        });
+        (0,file_saver__WEBPACK_IMPORTED_MODULE_2__.saveAs)(blob, "countries." + format);
+      });
     }
   }
 });
@@ -6593,6 +6619,21 @@ var route = function route(routeName) {
 })));
 //# sourceMappingURL=bootstrap.js.map
 
+
+/***/ }),
+
+/***/ "./node_modules/file-saver/dist/FileSaver.min.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/file-saver/dist/FileSaver.min.js ***!
+  \*******************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(a,b){if(true)!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (b),
+		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+		(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else {}})(this,function(){"use strict";function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Deprecated: Expected third argument to be a object"),b={autoBom:!b}),b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(a,b,c){var d=new XMLHttpRequest;d.open("GET",a),d.responseType="blob",d.onload=function(){g(d.response,b,c)},d.onerror=function(){console.error("could not download file")},d.send()}function d(a){var b=new XMLHttpRequest;b.open("HEAD",a,!1);try{b.send()}catch(a){}return 200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"))}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),a.dispatchEvent(b)}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof __webpack_require__.g&&__webpack_require__.g.global===__webpack_require__.g?__webpack_require__.g:void 0,a=f.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),g=f.saveAs||("object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype&&!a?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download",j.download=g,j.rel="noopener","string"==typeof b?(j.href=b,j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b),setTimeout(function(){i.revokeObjectURL(j.href)},4E4),setTimeout(function(){e(j)},0))}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download","string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f,i.target="_blank",setTimeout(function(){e(i)})}}:function(b,d,e,g){if(g=g||open("","_blank"),g&&(g.document.title=g.document.body.innerText="downloading..."),"string"==typeof b)return c(b,d,e);var h="application/octet-stream"===b.type,i=/constructor/i.test(f.HTMLElement)||f.safari,j=/CriOS\/[\d]+/.test(navigator.userAgent);if((j||h&&i||a)&&"undefined"!=typeof FileReader){var k=new FileReader;k.onloadend=function(){var a=k.result;a=j?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"),g?g.location.href=a:location=a,g=null},k.readAsDataURL(b)}else{var l=f.URL||f.webkitURL,m=l.createObjectURL(b);g?g.location=m:location.href=m,g=null,setTimeout(function(){l.revokeObjectURL(m)},4E4)}});f.saveAs=g.saveAs=g, true&&(module.exports=g)});
+
+//# sourceMappingURL=FileSaver.min.js.map
 
 /***/ }),
 
@@ -37716,10 +37757,17 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("Grid", { attrs: { countryList: _vm.countryList } }),
+      _c("Grid", {
+        attrs: { countryList: _vm.countryList },
+        on: { countryListChange: _vm.handleCountryListChange }
+      }),
       _vm._v(" "),
       _c("Toolbar", {
-        attrs: { route: _vm.route, countryList: _vm.countryList },
+        attrs: {
+          route: _vm.route,
+          fileTypes: _vm.fileTypes,
+          countryList: _vm.countryList
+        },
         on: {
           countryListChange: _vm.handleCountryListChange,
           fileUpload: _vm.handleFileUpload,
@@ -37758,56 +37806,76 @@ var render = function() {
     _vm._v(" "),
     _c(
       "tbody",
-      _vm._l(_vm.countryList, function(country) {
-        return _c("tr", [
-          _c("td", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: country.country,
-                  expression: "country.country"
-                }
-              ],
-              attrs: { type: "text", name: "countryName" },
-              domProps: { value: country.country },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+      [
+        _vm._l(_vm.countryList, function(country) {
+          return _c("tr", [
+            _c("td", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: country.country,
+                    expression: "country.country"
                   }
-                  _vm.$set(country, "country", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("td", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: country.capital,
-                  expression: "country.capital"
-                }
-              ],
-              attrs: { type: "text", name: "countryCapital" },
-              domProps: { value: country.capital },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+                ],
+                attrs: { type: "text", name: "countryName" },
+                domProps: { value: country.country },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(country, "country", $event.target.value)
                   }
-                  _vm.$set(country, "capital", $event.target.value)
                 }
-              }
-            })
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: country.capital,
+                    expression: "country.capital"
+                  }
+                ],
+                attrs: { type: "text", name: "countryCapital" },
+                domProps: { value: country.capital },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(country, "capital", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("input", {
+                attrs: { type: "button", name: "delete", value: "Delete" },
+                on: {
+                  click: function($event) {
+                    return _vm.handleDelete(country)
+                  }
+                }
+              })
+            ])
           ])
+        }),
+        _vm._v(" "),
+        _c("tr", { attrs: { colspan: "3" } }, [
+          _c("input", {
+            attrs: { type: "button", name: "add", value: "Add" },
+            on: { click: _vm.handleAdd }
+          })
         ])
-      }),
-      0
+      ],
+      2
     )
   ])
 }
@@ -37820,7 +37888,9 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Country")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Capital")])
+        _c("th", [_vm._v("Capital")]),
+        _vm._v(" "),
+        _c("th")
       ])
     ])
   }

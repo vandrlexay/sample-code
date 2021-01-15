@@ -11,6 +11,11 @@ class XMLFormat implements ConverterFormatInterface {
         return "xml";
     }
 
+    public function getMIMEType() :string {
+        return "text/xml";
+    }
+
+
     public function deserialize($file) : CountryList {
 
         $xml = simplexml_load_file($file);
@@ -25,5 +30,13 @@ class XMLFormat implements ConverterFormatInterface {
     }
 
     function serialize(CountryList $countryList) : string {
+        $xml = new \SimpleXMLElement('<root/>');
+
+        foreach ($countryList->serialize() as $country) {
+            $element = $xml->addChild("element");
+            $element->addChild("country", $country["country"]);
+            $element->addChild("capital", $country["capital"]);
+        }
+        return $xml->asXML();
     }
 }

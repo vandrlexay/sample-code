@@ -11,6 +11,11 @@ class CSVFormat implements ConverterFormatInterface {
         return "csv";
     }
 
+    public function getMIMEType() :string {
+        return "text/csv";
+    }
+
+
     public function deserialize($file) : CountryList {
 
         $countries = [];
@@ -29,7 +34,7 @@ class CSVFormat implements ConverterFormatInterface {
     function serialize(CountryList $countryList) : string {
         $serialized = "";
         foreach ($countryList->serialize() as $row) {
-            $serialized .= implode("," , array_map($row, function ($e) { return '"' . $e . '"'; })) . "\n";
+            $serialized .= implode("," , array_map(function ($e) { return '"' . $e . '"'; }, array_values($row))) . "\n";
         }
         return $serialized;
     }

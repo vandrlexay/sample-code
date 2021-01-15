@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Converter\Converter;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Storage;
 
 class CountryFileAPIController extends BaseController
 {
@@ -39,23 +40,27 @@ class CountryFileAPIController extends BaseController
         
         $countryList = json_encode($data["countryList"]);
 
-        $tmpFile = tmpfile();
-        fputs($tmpFile, $countryList);
+        $tmpFileName = "tmp_file_" . microtime();
+        Storage::disk('public')->put($tmpFileName, $countryList);
+
+        $converter = new Converter();
 
         $fileData = "";
-        $converter = new Converter();
+        
         try {
-            fseek($tmpFile, 0);
-            $countryList = $converter->load(stream_get_meta_data($tmpFile)['uri'], 'json');
+            $countryList = $converter->load(Storage::disk('public')->path($tmpFileName), 'json');
             $fileData = $converter->save($countryList, $format);
         }
         finally {
-            fclose($tmpFile);
+            Storage::disk('public')->delete($tmpFileName);
         }
 
-        print $fileData . "\n";
-        exit(0);
-        return response()->text($fileData);
+        return response()->streamDownload(function () use ($converter, $format, $fileData) {
+            print json_encode([
+                "mime" => $converter->getMIMETypeForExtension($format),
+                "data" => $fileData
+            ]);
+        }, "countries" . $format);
     }
 
 

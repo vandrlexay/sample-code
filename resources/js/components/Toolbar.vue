@@ -18,27 +18,10 @@
 
 <script type="text/javascript">
  export default {
-     props: [ "route", "countryList" ],
-     data: () => {
-         return {
-             fileTypes : []
-         };
-     },
-     // TODO move this to app, pass only list of file formats
-     created : function () {
-         const self = this;
-         // TODO remove
-         axios.get(this.route('countryfile/listFormats')).then(
-             function(response) {
-                 self.fileTypes = response.data;
-         });
-         
-
-     },
+     props: [ "route", "countryList", "fileTypes" ],
      methods : {
          handleDownload : function(e) {
              e.preventDefault();
-
              this.$emit("fileDownload", this.$refs.format.value);
          },
          handleUpload : function(e) {

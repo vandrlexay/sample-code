@@ -1,11 +1,15 @@
 <template>
   <div>
-    <Grid v-bind:countryList="countryList"/>
+    <Grid
+        v-bind:countryList="countryList"
+        v-on:countryListChange="handleCountryListChange"
+    />
     <Toolbar
         v-on:countryListChange="handleCountryListChange"
         v-on:fileUpload="handleFileUpload"
         v-on:fileDownload="handleFileDownload"
         v-bind:route="route"
+        v-bind:fileTypes="fileTypes" 
         v-bind:countryList="countryList"
     />
   </div>
@@ -13,7 +17,7 @@
 
 <script>
  export default {
-     props: ["countryList", "route"],
+     props: ["countryList", "route", "fileTypes"],
      methods : {
          handleCountryListChange : function(value) { this.$emit("countryListChange", value); },
          handleFileUpload        : function(value) { this.$emit("fileUpload", value); },

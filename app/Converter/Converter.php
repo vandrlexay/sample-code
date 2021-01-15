@@ -45,8 +45,15 @@ class Converter {
             function($f) {
                 return $f->getFileExtenstion();
             },
-            $this->formats
+            array_values($this->formats)
         );
+    }
+
+    public function getMIMETypeForExtension(string $format) {
+        if (empty($this->formats[$format]))
+            throw new \Exception("Unwnown MIME format for this extension: $format");
+
+        return $this->formats[$format]->getMIMEType();
     }
 
 }

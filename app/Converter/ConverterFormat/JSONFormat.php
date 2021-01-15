@@ -6,9 +6,15 @@ use App\Models\Country;
 use App\Models\CountryList;
     
 class JSONFormat implements ConverterFormatInterface {
+
     public function getFileExtenstion() :string {
         return "json";
     }
+
+    public function getMIMEType() :string {
+        return "application/json";
+    }
+
 
     public function deserialize($file) : CountryList {
         $rawArray = json_decode(file_get_contents($file), true);
