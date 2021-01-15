@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use App\Converter\Converter;
+
 class ConvertCountries extends Command
 {
     /**
@@ -11,14 +13,14 @@ class ConvertCountries extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'convert:countries {--input-file=} {--output-file=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Convert country file to another format';
 
     /**
      * Create a new command instance.
@@ -37,6 +39,21 @@ class ConvertCountries extends Command
      */
     public function handle()
     {
+        $input  = $this->option('input-file');
+        $output = $this->option('output-file');
+
+        if (!file_exists($input))
+            throw new \Exception("$input does not exist");
+
+        $inputFormat = strtolower(pathinfo($input)["extension"]);
+        $outputFormat = strtolower(pathinfo($output)["extension"]);
+
+        $c = new Converter();
+        $transfer = $c->load($input, $inputFormat);
+        $saved = $c->save($transfer, $outputFormat);
+
+        file_put_contents($output, $saved);
+        
         return 0;
     }
 }
