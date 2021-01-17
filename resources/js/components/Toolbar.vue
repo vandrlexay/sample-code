@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="justify-content-center">
     <h2>Upload</h2>
     <form method="POST" action="">
       <input v-on:change="handleUpload" type="file" ref="fileToUpload" name="fileToUpload" value="" />

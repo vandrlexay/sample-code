@@ -16,7 +16,7 @@ class CSVFormat implements ConverterFormatInterface {
     }
 
 
-    public function deserialize($file) : CountryList {
+    public function deserialize(string $file) : CountryList {
 
         $countries = [];
         $handle = fopen($file, 'r');

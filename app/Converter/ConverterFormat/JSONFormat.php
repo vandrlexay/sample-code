@@ -16,7 +16,7 @@ class JSONFormat implements ConverterFormatInterface {
     }
 
 
-    public function deserialize($file) : CountryList {
+    public function deserialize(string $file) : CountryList {
         $rawArray = json_decode(file_get_contents($file), true);
 
         $countries = [];

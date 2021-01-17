@@ -16,7 +16,7 @@ class XMLFormat implements ConverterFormatInterface {
     }
 
 
-    public function deserialize($file) : CountryList {
+    public function deserialize(string $file) : CountryList {
 
         $xml = simplexml_load_file($file);
 

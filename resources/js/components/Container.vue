@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex flex-row">
     <Grid
         v-bind:countryList="countryList"
         v-on:countryListChange="handleCountryListChange"

@@ -37756,6 +37756,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "d-flex flex-row" },
     [
       _c("Grid", {
         attrs: { countryList: _vm.countryList },
@@ -37917,7 +37918,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "justify-content-center" }, [
     _c("h2", [_vm._v("Upload")]),
     _vm._v(" "),
     _c("form", { attrs: { method: "POST", action: "" } }, [

@@ -26,21 +26,31 @@ class Converter {
         }
     }
 
-    public function load($file, $format) {
+    /**
+     * Parse given file in specified format and return it in form of
+     * CountryList
+     */
+    public function load(string $file, string $format) : CountryList {
         if (empty($this->formats[$format]))
             throw new \Exception("Unsupported input format: $format");
 
         return $this->formats[$format]->deserialize($file);
     }
 
-    public function save(CountryList $countryList, $format) {
+    /**
+     * Convert given CountryList to given format
+     */
+    public function save(CountryList $countryList, string $format) : string {
         if (empty($this->formats[$format]))
             throw new \Exception("Unsupported output format: $format");
 
         return $this->formats[$format]->serialize($countryList);
     }
 
-    public function getAvailableFormats() {
+    /**
+     * List available file extensions to convert from/to
+     */
+    public function getAvailableFormats() : array {
         return array_map(
             function($f) {
                 return $f->getFileExtenstion();
@@ -49,7 +59,10 @@ class Converter {
         );
     }
 
-    public function getMIMETypeForExtension(string $format) {
+    /**
+     * Get MIME type for given file extension
+     */
+    public function getMIMETypeForExtension(string $format) : string {
         if (empty($this->formats[$format]))
             throw new \Exception("Unwnown MIME format for this extension: $format");
 
