@@ -1,15 +1,2 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<root>
-    <element>
-        <capital>Kyiv</capital>
-        <country>Ukraine</country>
-    </element>
-    <element>
-        <capital>Berlin</capital>
-        <country>Germany</country>
-    </element>
-    <element>
-        <capital>Washington</capital>
-        <country>USA</country>
-    </element>
-</root>
+<?xml version="1.0"?>
+<root><element><country>Ukraine</country><capital>Kyiv</capital></element><element><country>Germany</country><capital>Berlin</capital></element><element><country>USA</country><capital>Washington</capital></element></root>

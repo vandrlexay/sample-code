@@ -1,14 +1,1 @@
-[
-  {
-    "country": "Ukraine",
-    "capital": "Kyiv"
-  },
-  {
-    "country": "Germany",
-    "capital": "Berlin"
-  },
-  {
-    "country": "USA",
-    "capital": "Washington"
-  }
-]
+[{"country":"Ukraine","capital":"Kyiv"},{"country":"Germany","capital":"Berlin"},{"country":"USA","capital":"Washington"}]

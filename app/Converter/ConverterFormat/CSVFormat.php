@@ -33,7 +33,13 @@ class CSVFormat implements ConverterFormatInterface {
     
     function serialize(CountryList $countryList) : string {
         $serialized = "";
-        foreach ($countryList->serialize() as $row) {
+
+        $rawArray = array_merge([[
+            "country" => "Country",
+            "capital" => "Capital"
+        ]], $countryList->serialize());
+
+        foreach ($rawArray as $row) {
             $serialized .= implode("," , array_map(function ($e) { return '"' . $e . '"'; }, array_values($row))) . "\n";
         }
         return $serialized;
