@@ -34,7 +34,7 @@ const app = new Vue({
             fileTypes : [],
             route: route,
             countryList : [
-                { "country" : "aaa", "capital" : "AAA" }
+                { "country" : "", "capital" : "" }
             ]
         };
     },
@@ -57,6 +57,11 @@ const app = new Vue({
                 data: formData,
                 headers: {'Content-Type': 'multipart/form-data' }
             }).then(function (response) {
+                if (response.data.error !== undefined) {
+                    alert(response.data.error);
+                    return;
+                }
+                
                 component.countryList = response.data;
             });
         },

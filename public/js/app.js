@@ -1862,6 +1862,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["countryList", "route", "fileTypes"],
   methods: {
@@ -1918,6 +1927,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["countryList"],
   methods: {
@@ -1946,6 +1957,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -2022,8 +2036,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
       fileTypes: [],
       route: route,
       countryList: [{
-        "country": "aaa",
-        "capital": "AAA"
+        "country": "",
+        "capital": ""
       }]
     };
   },
@@ -2047,6 +2061,11 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
+        if (response.data.error !== undefined) {
+          alert(response.data.error);
+          return;
+        }
+
         component.countryList = response.data;
       });
     },
@@ -37754,30 +37773,45 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "d-flex flex-row" },
-    [
-      _c("Grid", {
-        attrs: { countryList: _vm.countryList },
-        on: { countryListChange: _vm.handleCountryListChange }
-      }),
-      _vm._v(" "),
-      _c("Toolbar", {
-        attrs: {
-          route: _vm.route,
-          fileTypes: _vm.fileTypes,
-          countryList: _vm.countryList
-        },
-        on: {
-          countryListChange: _vm.handleCountryListChange,
-          fileUpload: _vm.handleFileUpload,
-          fileDownload: _vm.handleFileDownload
-        }
-      })
-    ],
-    1
-  )
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-md-12" },
+        [
+          _c("Grid", {
+            attrs: { countryList: _vm.countryList },
+            on: { countryListChange: _vm.handleCountryListChange }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("hr", { staticClass: "col-md-8" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "d-flex justify-content-center" },
+        [
+          _c("Toolbar", {
+            attrs: {
+              route: _vm.route,
+              fileTypes: _vm.fileTypes,
+              countryList: _vm.countryList
+            },
+            on: {
+              countryListChange: _vm.handleCountryListChange,
+              fileUpload: _vm.handleFileUpload,
+              fileDownload: _vm.handleFileDownload
+            }
+          })
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37802,7 +37836,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", { attrs: { border: "1" } }, [
+  return _c("table", { attrs: { width: "50%" } }, [
     _vm._m(0),
     _vm._v(" "),
     _c(
@@ -37869,11 +37903,13 @@ var render = function() {
           ])
         }),
         _vm._v(" "),
-        _c("tr", { attrs: { colspan: "3" } }, [
-          _c("input", {
-            attrs: { type: "button", name: "add", value: "Add" },
-            on: { click: _vm.handleAdd }
-          })
+        _c("tr", [
+          _c("td", { attrs: { colspan: "3", align: "left" } }, [
+            _c("input", {
+              attrs: { type: "button", name: "add", value: "Add" },
+              on: { click: _vm.handleAdd }
+            })
+          ])
         ])
       ],
       2
@@ -37918,35 +37954,46 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "justify-content-center" }, [
-    _c("h2", [_vm._v("Upload")]),
-    _vm._v(" "),
-    _c("form", { attrs: { method: "POST", action: "" } }, [
-      _c("input", {
-        ref: "fileToUpload",
-        attrs: { type: "file", name: "fileToUpload", value: "" },
-        on: { change: _vm.handleUpload }
-      })
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-md-7" }, [
+      _c(
+        "form",
+        { staticClass: "row", attrs: { method: "POST", action: "" } },
+        [
+          _c(
+            "label",
+            { staticClass: "col-md-3", attrs: { for: "fileToUpload" } },
+            [_vm._v("Select file")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            ref: "fileToUpload",
+            staticClass: "col-md-9",
+            attrs: { type: "file", name: "fileToUpload", value: "" },
+            on: { change: _vm.handleUpload }
+          })
+        ]
+      )
     ]),
     _vm._v(" "),
-    _c("h2", [_vm._v("Save")]),
-    _vm._v(" "),
-    _c("form", { attrs: { method: "POST", action: "" } }, [
-      _c("label", { attrs: { for: "fileFormat" } }, [_vm._v("File format")]),
-      _vm._v(" "),
-      _c(
-        "select",
-        { ref: "format", attrs: { name: "fileFormat" } },
-        _vm._l(_vm.fileTypes, function(fileType) {
-          return _c("option", [_vm._v(_vm._s(fileType))])
-        }),
-        0
-      ),
-      _vm._v(" "),
-      _c("input", {
-        attrs: { type: "submit", name: "fileToDownload", value: "Download" },
-        on: { click: _vm.handleDownload }
-      })
+    _c("div", { staticClass: "col-md-5" }, [
+      _c("form", { attrs: { method: "POST", action: "" } }, [
+        _c("label", { attrs: { for: "fileFormat" } }, [_vm._v("File format")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          { ref: "format", attrs: { name: "fileFormat" } },
+          _vm._l(_vm.fileTypes, function(fileType) {
+            return _c("option", [_vm._v(_vm._s(fileType))])
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("input", {
+          attrs: { type: "submit", name: "fileToDownload", value: "Download" },
+          on: { click: _vm.handleDownload }
+        })
+      ])
     ])
   ])
 }

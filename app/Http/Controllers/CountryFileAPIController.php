@@ -18,10 +18,18 @@ class CountryFileAPIController extends BaseController
     {
         $file = $request->file('fileToUpload');
         $converter = new Converter();
-        $converted = $converter->load(
-            $file->path(),
-            strtolower($file->getClientOriginalExtension())
-        );
+
+        try {
+            $converted = $converter->load(
+                $file->path(),
+                strtolower($file->getClientOriginalExtension())
+            );
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                "error" => "Wrong file format"
+            ]);
+        }
 
         return response()->json(
             $converted->serialize()
