@@ -21,12 +21,14 @@
 
 <script type="text/javascript">
  export default {
-     props: [ "route", "countryList", "fileTypes" ],
+     props: [ "countryList", "fileTypes" ],
      methods : {
+         
          handleDownload : function(e) {
              e.preventDefault();
              this.$emit("fileDownload", this.$refs.format.value);
          },
+         
          handleUpload : function(e) {
              e.preventDefault();
 

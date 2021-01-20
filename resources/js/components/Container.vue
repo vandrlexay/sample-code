@@ -15,7 +15,6 @@
             v-on:countryListChange="handleCountryListChange"
             v-on:fileUpload="handleFileUpload"
             v-on:fileDownload="handleFileDownload"
-            v-bind:route="route"
             v-bind:fileTypes="fileTypes" 
             v-bind:countryList="countryList"
         />

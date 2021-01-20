@@ -32,9 +32,11 @@
  export default {
      props: ["countryList"],
      methods: {
+         
          handleDelete : function(country) {
              this.$delete(this.countryList, this.countryList.indexOf(country));
          },
+         
          handleAdd : function(e) {
              this.countryList.push({ country : "", capital : ""});
          }

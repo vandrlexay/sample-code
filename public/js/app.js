@@ -1870,7 +1870,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["countryList", "route", "fileTypes"],
   methods: {
@@ -1979,7 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["route", "countryList", "fileTypes"],
+  props: ["countryList", "fileTypes"],
   methods: {
     handleDownload: function handleDownload(e) {
       e.preventDefault();
@@ -2009,7 +2008,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _routes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes.js */ "./resources/js/routes.js");
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -2019,22 +2020,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-window.Vue = vue__WEBPACK_IMPORTED_MODULE_3__.default;
-vue__WEBPACK_IMPORTED_MODULE_3__.default.component('Grid', __webpack_require__(/*! ./components/Grid.vue */ "./resources/js/components/Grid.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_3__.default.component('Toolbar', __webpack_require__(/*! ./components/Toolbar.vue */ "./resources/js/components/Toolbar.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_3__.default.component('Container', __webpack_require__(/*! ./components/Container.vue */ "./resources/js/components/Container.vue").default); // REMOVE
 
-var route = function route(url) {
-  return "/index.php" + (0,_routes_js__WEBPACK_IMPORTED_MODULE_1__.route)(url);
-};
-
-var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
+window.Vue = vue__WEBPACK_IMPORTED_MODULE_4__.default;
+vue__WEBPACK_IMPORTED_MODULE_4__.default.component('Grid', __webpack_require__(/*! ./components/Grid.vue */ "./resources/js/components/Grid.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_4__.default.component('Toolbar', __webpack_require__(/*! ./components/Toolbar.vue */ "./resources/js/components/Toolbar.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_4__.default.component('Container', __webpack_require__(/*! ./components/Container.vue */ "./resources/js/components/Container.vue").default);
+var app = new vue__WEBPACK_IMPORTED_MODULE_4__.default({
   el: '#app',
-  template: "<Container \n                  v-on:countryListChange=\"handleCountryListChange\" \n                  v-on:fileUpload=\"handleFileUpload\"\n                  v-on:fileDownload=\"handleFileDownload\"\n                  v-bind:countryList=\"countryList\" \n                  v-bind:fileTypes=\"fileTypes\" \n                  v-bind:route=\"route\"/>",
+  template: "<Container \n                  v-on:countryListChange=\"handleCountryListChange\" \n                  v-on:fileUpload=\"handleFileUpload\"\n                  v-on:fileDownload=\"handleFileDownload\"\n                  v-bind:countryList=\"countryList\" \n                  v-bind:fileTypes=\"fileTypes\" \n                  />",
   data: function data() {
     return {
       fileTypes: [],
-      route: route,
       countryList: [{
         "country": "",
         "capital": ""
@@ -2043,8 +2039,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
   },
   created: function created() {
     var app = this;
-    axios.get(route('countryfile/listFormats')).then(function (response) {
-      app.fileTypes = response.data;
+    axios__WEBPACK_IMPORTED_MODULE_3___default().get((0,_routes_js__WEBPACK_IMPORTED_MODULE_1__.route)('countryfile/listFormats')).then(function (response) {
+      return app.fileTypes = response.data;
     });
   },
   methods: {
@@ -2053,9 +2049,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
     },
     handleFileUpload: function handleFileUpload(formData) {
       var component = this;
-      axios({
+      axios__WEBPACK_IMPORTED_MODULE_3___default()({
         method: 'POST',
-        url: this.route('countryfile/upload'),
+        url: (0,_routes_js__WEBPACK_IMPORTED_MODULE_1__.route)('countryfile/upload'),
         data: formData,
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -2070,9 +2066,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
       });
     },
     handleFileDownload: function handleFileDownload(format) {
-      axios({
+      axios__WEBPACK_IMPORTED_MODULE_3___default()({
         method: 'POST',
-        url: this.route('countryfile/download'),
+        url: (0,_routes_js__WEBPACK_IMPORTED_MODULE_1__.route)('countryfile/download'),
         data: {
           format: format,
           countryList: this.countryList
@@ -2084,7 +2080,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
         var blob = new Blob([response.data.data], {
           type: response.data.mime
         });
-        (0,file_saver__WEBPACK_IMPORTED_MODULE_2__.saveAs)(blob, "countries." + format);
+        file_saver__WEBPACK_IMPORTED_MODULE_2___default()(blob, "countries." + format);
       });
     }
   }
@@ -37796,11 +37792,7 @@ var render = function() {
         { staticClass: "d-flex justify-content-center" },
         [
           _c("Toolbar", {
-            attrs: {
-              route: _vm.route,
-              fileTypes: _vm.fileTypes,
-              countryList: _vm.countryList
-            },
+            attrs: { fileTypes: _vm.fileTypes, countryList: _vm.countryList },
             on: {
               countryListChange: _vm.handleCountryListChange,
               fileUpload: _vm.handleFileUpload,

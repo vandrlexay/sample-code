@@ -63,12 +63,12 @@ class CountryFileAPIController extends BaseController
             Storage::disk('public')->delete($tmpFileName);
         }
 
-        return response()->streamDownload(function () use ($converter, $format, $fileData) {
-            print json_encode([
+        return response()->json(
+            [
                 "mime" => $converter->getMIMETypeForExtension($format),
                 "data" => $fileData
-            ]);
-        }, "countries" . $format);
+            ]
+        );
     }
 
 

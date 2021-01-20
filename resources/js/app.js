@@ -5,46 +5,45 @@
  */
 
 import './bootstrap';
-import { route as _route } from "./routes.js";
-import { saveAs } from "file-saver";
-
-import { default as Vue } from "vue";
+import { route } from "./routes.js";
+import saveAs from "file-saver";
+import axios from "axios";
+import Vue from "vue";
 window.Vue = Vue;
-
 
 Vue.component('Grid', require('./components/Grid.vue').default);
 Vue.component('Toolbar', require('./components/Toolbar.vue').default);
 Vue.component('Container', require('./components/Container.vue').default);
 
 
-// REMOVE
-const route = function(url) { return "/index.php" + _route(url); };
-
 const app = new Vue({
     el: '#app',
+    
     template : `<Container 
                   v-on:countryListChange="handleCountryListChange" 
                   v-on:fileUpload="handleFileUpload"
                   v-on:fileDownload="handleFileDownload"
                   v-bind:countryList="countryList" 
                   v-bind:fileTypes="fileTypes" 
-                  v-bind:route="route"/>`,
+                  />`,
+    
     data : function () {
         return {
             fileTypes : [],
-            route: route,
             countryList : [
                 { "country" : "", "capital" : "" }
             ]
         };
     },
+    
     created : function() {
         const app = this;
-        axios.get(route('countryfile/listFormats')).then(
-            function(response) {
-                app.fileTypes = response.data;
-            });
+        axios.get(
+            route('countryfile/listFormats')).then(
+                (response) => app.fileTypes = response.data
+            );
     },
+    
     methods : {
         handleCountryListChange : function(value) {
             this.countryList = value;
@@ -53,7 +52,7 @@ const app = new Vue({
             const component = this;
             axios({
                 method: 'POST',
-                url: this.route('countryfile/upload'),
+                url: route('countryfile/upload'),
                 data: formData,
                 headers: {'Content-Type': 'multipart/form-data' }
             }).then(function (response) {
@@ -69,7 +68,7 @@ const app = new Vue({
         handleFileDownload : function(format) {
             axios({
                 method: 'POST',
-                url: this.route('countryfile/download'),
+                url: route('countryfile/download'),
                 data: {
                     format : format,
                     countryList  : this.countryList
