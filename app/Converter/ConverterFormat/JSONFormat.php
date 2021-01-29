@@ -1,22 +1,26 @@
 <?php
 
 namespace App\Converter\ConverterFormat;
+
 use App\Converter\ConverterFormatInterface;
 use App\Models\Country;
 use App\Models\CountryList;
     
-class JSONFormat implements ConverterFormatInterface {
-
-    public function getFileExtenstion() :string {
+class JSONFormat implements ConverterFormatInterface
+{
+    public function getFileExtenstion() :string
+    {
         return "json";
     }
 
-    public function getMIMEType() :string {
+    public function getMIMEType() :string
+    {
         return "application/json";
     }
 
 
-    public function deserialize(string $file) : CountryList {
+    public function deserialize(string $file) : CountryList
+    {
         $rawArray = json_decode(file_get_contents($file), true);
 
         $countries = [];
@@ -28,7 +32,8 @@ class JSONFormat implements ConverterFormatInterface {
         return new CountryList($countries);
     }
 
-    function serialize(CountryList $countryList) : string {
+    public function serialize(CountryList $countryList) : string
+    {
         return json_encode($countryList->serialize());
     }
 }

@@ -4,7 +4,8 @@ namespace App\Converter;
 
 use App\Models\CountryList;
 
-interface ConverterFormatInterface {
+interface ConverterFormatInterface
+{
     public function getFileExtenstion() : string;
     public function getMIMEType() :string;
     public function serialize(CountryList $countryList) : string;

@@ -24,8 +24,7 @@ class CountryFileAPIController extends BaseController
                 $file->path(),
                 strtolower($file->getClientOriginalExtension())
             );
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 "error" => "Wrong file format"
             ]);
@@ -58,8 +57,7 @@ class CountryFileAPIController extends BaseController
         try {
             $countryList = $converter->load(Storage::disk('public')->path($tmpFileName), 'json');
             $fileData = $converter->save($countryList, $format);
-        }
-        finally {
+        } finally {
             Storage::disk('public')->delete($tmpFileName);
         }
 

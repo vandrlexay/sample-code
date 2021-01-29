@@ -42,8 +42,9 @@ class ConvertCountries extends Command
         $input  = $this->option('input-file');
         $output = $this->option('output-file');
 
-        if (!file_exists($input))
+        if (!file_exists($input)) {
             throw new \Exception("$input does not exist");
+        }
 
         $inputFormat = strtolower(pathinfo($input)["extension"]);
         $outputFormat = strtolower(pathinfo($output)["extension"]);
